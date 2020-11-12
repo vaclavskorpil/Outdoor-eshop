@@ -1,0 +1,12 @@
+@media (max-width: 620px) {
+    .picture img {
+        width: 100%;
+    }
+}
+
+.centeredContentWrapper {
+    border: 1px dotted red;
+    margin: auto;
+    width: 70%;
+    padding: 0 10px;
+}

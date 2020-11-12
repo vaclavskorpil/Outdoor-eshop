@@ -1,0 +1,69 @@
+.input-group {
+    position: relative;
+    margin: 25px 0 25px;
+}
+
+input {
+    background-color: #eeeeee;
+    margin: auto;
+    font-size: 13px;
+    padding: 10px 5px 10px 5px;
+    display: block;
+    width: 99%;
+    border: none;
+    border-bottom: 1px solid #757575;
+}
+
+
+input:focus {
+    outline: none;
+}
+
+label {
+    color: #999;
+    font-size: 13px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 5px;
+    top: 10px;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+}
+
+
+input[type = email]:not(:placeholder-shown) ~ label {
+    top: -20px;
+    font-size: 10px;
+    color: #4285f4;
+}
+
+input:focus ~ label,
+input:valid ~ label {
+    top: -20px;
+    font-size: 10px;
+    color: #4285f4;
+}
+
+
+input[type= "submit"] {
+    color: #999;
+    border-radius: 8px;
+    background-color: white;
+    border: 2px solid #4285f4;
+}
+
+.button:hover {
+    background-color: #b5d2fd;
+}
+
+
+.button:focus {
+    background-color: #b5d2fd;
+}
+
+.formTitle {
+    margin: 0 5px;
+}
+
