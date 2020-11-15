@@ -1,28 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-
-function write_log($log_msg)
-{
-    $log_filename = "logs";
-    if (!file_exists($log_filename)) {
-        mkdir($log_filename, 0777, true);
-    }
-    $log_file_data = $log_filename . '/debug.log';
-    file_put_contents($log_file_data, time() . "  " . $log_msg . "\n", FILE_APPEND);
-
-}
-
-write_log("new start =====================================");
-include "head.php";
+include_once "includes.php";
 session_start();
-include_once "Constants.php";
-include_once "services/AuthControler.php";
-include_once "services/Connection.php";
-include_once "services/UserControler.php";
 ?>
 <body>
 <?php
+
+use entities\user;
 include "pages/menu.php";
 
 if (isset($_GET["page"])) {
@@ -42,6 +27,11 @@ if (isset($_GET["page"])) {
         case ADMIN_CONTROLER:
             include "pages/usersTable.php";
             break;
+        case SHOP:
+            include "pages/shop.php";
+            break;
+        default:
+            include "pages/shop.php";
     }
 }
 ?>

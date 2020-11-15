@@ -1,71 +1,76 @@
 <link rel="stylesheet" href="css/form.css">
 <?php
-if (AuthControler::isLoggedIn()):
 
-    $email = $_SESSION[LOGGED_USER_EMAIL];
+use services\AuthController;
+
+if (AuthController::isLoggedIn()):
+
+    $id = $_SESSION[USER_ID];
+    $destination = PROFILE;
+
     if (isset($_GET["action"])) {
         $destination = ADMIN_CONTROLER;
 
-
-        if (isset($_POST["email"]) && $_POST["email"] != "") {
-            var_dump($_POST["email"]);
-            $email = $_POST["email"];
-        }
+        $id = $_POST["id"];
     }
-
-    $me = UserControler::getUser($email);
-    var_dump($me);
-    $destination = PROFILE;
-
-    if (isset($_POST["jmeno"])) {
-
-        UserControler::updateUser($_POST["jmeno"], $_POST["prijmeni"], $_POST["email"], $_POST["ulice"], $_POST["mesto"], $_POST["cisloPopisne"], $_POST["psc"]);
+    if (isset($_POST["name"])) {
+        UserController::updateUserById($id, $_POST["name"], $_POST["surname"], $_POST["phone_number"], $_POST["city"], $_POST["street"], $_POST["home_number"], $_POST["zip"]);
+        header("Location: ?page=$destination");
     }
-
+    $user = UserController::getById($id);
     ?>
 
 
     <section class="centeredContentWrapper">
-        <h3 class="formTitle">Profil uživatele <? echo $me["jmeno"] . " " . $me["prijmeni"] ?></h3>
-        <form action="?page=<? echo $destination ?>" method="post">
+        <h3 class="formTitle">Profil
+            uživatele <? echo $user->getDeliveryInfo()->getName() . " " . $user->getDeliveryInfo()->getSurname() ?></h3>
+        <form method="post">
             <div class="input-group">
-                <input name="jmeno" type='text' required value=<? echo $me["jmeno"] ?> required/>
+                <input name="name" type='text' required value=<? echo $user->getDeliveryInfo()->getName() ?> required/>
                 <label>Jméno </label>
             </div>
             <div class="input-group">
-                <input name="email" type='hidden' required value=<? echo $email ?>>
+                <input name="id" type='hidden' required value=<? echo $user->getId() ?>>
             </div>
 
             <div class="input-group">
-                <input name="prijmeni" type="text" value=<? echo $me["prijmeni"] ?> required/>
+                <input name="surname" type="text" value=<? echo $user->getDeliveryInfo()->getSurname() ?> required/>
 
                 <label>Přijmení </label>
             </div>
             <div class="input-group">
-                <input name="mesto" type="text" value=<? echo $me["mesto"] ?> required/>
+                <input name="city" type="text" value=<? echo $user->getDeliveryInfo()->getCity() ?> required/>
                 <label>Město </label>
             </div>
             <div class='input-group'>
-                <input name='ulice' type='text' value=<? echo $me["ulice"] ?> required/>
-                <label>Ulice </label>
+                <input name='street' type='text' value=<? echo $user->getDeliveryInfo()->getStreet() ?> required/>
+                <label>street </label>
             </div>
 
             <div class='input-group'>
-                <input name='cisloPopisne' type='number' value=<? echo $me["cislo_popisne"] ?> required/>
+                <input name='home_number' type='number'
+                       value=<? echo $user->getDeliveryInfo()->getHomeNumber() ?> required/>
                 <label>Číslo popisné </label>
+            </div>
 
-                <div class='input-group'>
-                    <input name='psc' type='number' value=<? echo $me["psc"] ?> required/>
-                    <label>PSČ </label>
-                </div>
+            <div class='input-group'>
+                <input name='zip' type='number' value=<? echo $user->getDeliveryInfo()->getZip() ?> required/>
+                <label>PSČ </label>
+            </div>
 
 
-                <div class='row'>
-                    <input class='button'
-                           type='submit'
-                           value='Změmit údaje'
-                    >
-                </div>
+            <div class='input-group'>
+                <input name='phone_number' type='number' value=<? echo $user->getPhoneNumber() ?> required/>
+                <label>Telefonní číslo </label>
+            </div>
+
+
+            <div class='row'>
+                <input class='button'
+                       type='submit'
+                       value='Změmit údaje'
+                >
+            </div>
 
         </form>
     </section>

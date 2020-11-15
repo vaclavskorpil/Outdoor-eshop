@@ -1,7 +1,7 @@
 <?php
 
-if($_SESSION[LOGGED_USER_EMAIL]){
-    unset($_SESSION[LOGGED_USER_EMAIL]);
+if($_SESSION[USER_ID]){
+    unset($_SESSION[USER_ID]);
     header("Location: ?page=login");
     header("Refresh:0");
 }

@@ -16,12 +16,14 @@
 #hamitems a {
     width: 20%; /* 100% / 5 tabs = 20% */
     padding: 10px;
-    color: white;
+    font-size: 20px;
+    color: #818181;
     text-decoration: none;
     text-align: center;
 }
 #hamitems a:hover {
     background: #401408;
+    color: #f1f1f1;
 }
 
 /* [ON SMALL SCREENS] */

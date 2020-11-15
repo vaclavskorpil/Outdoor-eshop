@@ -2,15 +2,16 @@
 <link rel="stylesheet" href="css/message.css">
 <?php
 
+use services\AuthController;
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $email = $_POST["email"];
     $password = $_POST["heslo"];
 
-    $success = AuthControler::login($email, $password);
+    $success = AuthController::login($email, $password);
     if (!$success) {
         $_SESSION[MESSAGE] = "Chybné jméno nebo heslo.";
     } else {
-        $_SESSION[LOGGED_USER_EMAIL] = $email;
         $_SESSION[MESSAGE] = "Jste přihlášen.";
         $_GET["page"] = "main";
         header("Refresh:0");
