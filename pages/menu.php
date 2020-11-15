@@ -5,16 +5,20 @@
 
     <!-- [MENU ITEMS] -->
     <div id="hamitems">
+        <a href="?page=<? echo SHOP ?>">Obchod</a>
         <a href="?page=<? echo REGISTER ?>">Registrovat</a>
 
 
         <?
-        if (AuthControler::isLoggedIn()) {
+
+        use services\AuthController;
+
+        if (AuthController::isLoggedIn()) {
 
             echo "<a href='?page=profile'>Profil</a>";
             echo "<<a href='?page=logout' onclick=''>Odhlásit</a>";
 
-            if (AuthControler::isAdmin()) {
+            if (AuthController::isAdmin()) {
                 echo "<a href='?page=adminControler'>Správa uživatelů</a>";
             }
         } else {

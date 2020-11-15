@@ -2,20 +2,24 @@
 <link rel="stylesheet" href="css/message.css">
 <?php
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $jmeno = $_POST["jmeno"];
-    $prijmeni = $_POST["prijmeni"];
-    $email = $_POST["email"];
-    $heslo = $_POST["heslo"];
-    $mesto = $_POST["mesto"];
-    $ulice = $_POST["ulice"];
-    $cisloPopisne = $_POST["cisloPopisne"];
-    $psc = $_POST["psc"];
+use services\AuthController;
 
-    $success = AuthControler::register($jmeno, $prijmeni
-        , $email, $heslo, $mesto,
-        $ulice, $cisloPopisne, $psc);
-    if (!$success) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $name = $_POST["name"];
+    $surname = $_POST["surname"];
+    $email = $_POST["email"];
+    $password = $_POST["password"];
+    $city = $_POST["city"];
+    $street = $_POST["street"];
+    $homeNumber = $_POST["home_number"];
+    $zip = $_POST["zip"];
+    $phoneNumber = $_POST["phone_number"];
+
+    $user = AuthController::register($password, $name
+        , $surname, $email, $phoneNumber,
+        $city, $street, $homeNumber, $zip);
+
+    if ($user == null) {
         $_SESSION[MESSAGE] = "Uživatel s tímto emailem je již registrován.";
     }
 }
@@ -35,13 +39,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         <div class="input-group">
-            <input name="jmeno" type="text" required/>
+            <input name="name" type="text" required/>
 
             <label>Jméno </label>
         </div>
 
         <div class="input-group">
-            <input name="prijmeni" type="text" required/>
+            <input name="surname" type="text" required/>
 
             <label>Přijmení </label>
         </div>
@@ -51,23 +55,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         </div>
         <div class="input-group">
-            <input name="heslo" type="password" required/>
+            <input name="password" type="password" required/>
             <label>Heslo </label>
         </div>
         <div class="input-group">
-            <input name="mesto" type="text" required/>
+            <input name="city" type="text" required/>
             <label>Město </label>
         </div>
         <div class="input-group">
-            <input name="ulice" type="text" required/>
+            <input name="street" type="text" required/>
             <label>Ulice </label>
         </div>
         <div class="input-group">
-            <input name="cisloPopisne" type="number" required/>
+            <input name="home_number" type="number" required/>
             <label>Číslo popisné </label>
         </div>
         <div class="input-group">
-            <input name="psc" type="number" required/>
+            <input name="zip" type="number" required/>
+            <label>PSČ </label>
+        </div>
+        <div class="input-group">
+            <input name="phone_number" type="number" required/>
             <label>PSČ </label>
         </div>
 

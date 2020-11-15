@@ -1,12 +1,16 @@
-<?php if (AuthControler::isAdmin()): ?>
+<?php use services\AuthController;
+
+if (AuthController::isAdmin()): ?>
     <?php
-    $users = UserControler::getAll();
+    $users = UserController::getAll();
 
 
     if(isset($_GET["action"]) && $_GET["action"] == "delete"){
-        UserControler::deleteUser($_POST["email"]);
+        UserController::deleteUser($_POST["id"]);
+        unset($_POST["id"]);
         header( "Location: ?page=".ADMIN_CONTROLER);
     }
+
     ?>
 
 
@@ -23,25 +27,25 @@
     </tr>
     </thead>
     <tbody>
-    <?php foreach ($users as $row): array_map('htmlentities', $row); ?>
+    <?php foreach ($users as $user): ?>
         <tr>
 
-            <td><? echo $row["jmeno"] ?></td>
-            <td><? echo $row["prijmeni"] ?></td>
-            <td><? echo $row["email"] ?></td>
-            <td><? echo $row["ulice"] ?></td>
-            <td><? echo $row["mesto"] ?></td>
-            <td><? echo $row["psc"] ?></td>
+            <td><? echo $user->getName() ?></td>
+            <td><? echo $user->getSurname() ?></td>
+            <td><? echo $user->getEmail() ?></td>
+            <td><? echo $user->getStreet() ?></td>
+            <td><? echo $user->getCity() ?></td>
+            <td><? echo $user->getZip() ?></td>
             <td>
                 <form action="?page=<? echo PROFILE ?>&action=update" method="post">
-                    <input type="hidden" name="email" value=<? echo $row["email"] ?>>
+                    <input type="hidden" name="id" value=<? echo $user->getId() ?>>
                     <input type="submit" value="Edituj">
                 </form>
             </td>
 
             <td>
                 <form action="?page=<? echo ADMIN_CONTROLER ?>&action=delete" method="post">
-                    <input type="hidden" name="email" value=<? echo $row["email"] ?>>
+                    <input type="hidden" name="id" value=<? echo $user->getId() ?>>
                     <input type="submit" value="Smaž">
                 </form>
             </td>
