@@ -18,6 +18,7 @@ if (isset($_GET["orderId"])):
         <h2>
             Detail objednávky č. <? echo $_GET["orderId"] ?>
         </h2>
+        <div class="state">Stav: <? echo $order["status"] ?></div>
 
         <h3> Doručivací údaje</h3>
         <div class="delivery-info">
@@ -37,6 +38,7 @@ if (isset($_GET["orderId"])):
         <h3>
             Objednané produkty
         </h3>
+
 
         <table class="basic-table">
 

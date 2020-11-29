@@ -7,6 +7,7 @@
     <div id="hamitems">
         <a href="?page=user_control">Správa uživatelů</a>
         <a href="?page=order_control">Správa objednávek</a>
+        <a href="?page=product_control">Správa produktů</a>
         <a href='?page=logout' onclick=''>Odhlásit</a>
     </div>
 </nav>

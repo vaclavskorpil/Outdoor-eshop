@@ -1,4 +1,15 @@
 
-.product{
-
+.img-tiny {
+    width: 80px;
+    max-height: 80px;
 }
+
+.img-column {
+    width: 80px;
+    padding: 0;
+}
+
+#add-product {
+    width: 220px;
+}
+

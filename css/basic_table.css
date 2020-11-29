@@ -48,3 +48,9 @@ tbody tr:hover {
 .cell-padd {
     padding: 10px;
 }
+
+.state {
+    display: flex;
+    padding: 5px;
+    background: darkseagreen;
+}

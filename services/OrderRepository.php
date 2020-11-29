@@ -67,4 +67,18 @@ class OrderRepository
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
     }
+
+    static function getAllOrders()
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "SELECT o.*, s.name as status
+                FROM SHOP_ORDER o
+                inner join ORDER_STATUS s  on o.id_order_status = s.id
+                inner join DELIVERY_INFO DI on o.delivery_info = DI.id
+                order by o.order_datetime desc");
+        $stmt->bindParam(":oid", $orderId);
+        $stmt->execute();
+        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+    }
 }
