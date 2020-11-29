@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/form.css">
+<link rel="stylesheet" href="css/order_form.css">
 <link rel="stylesheet" href="css/message.css">
 <?php
 
@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 ?>
-<section class="centeredContentWrapper">
+<section class="main">
     <h3 class="formTitle">Registrace</h3>
 
     <?php
@@ -39,44 +39,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
         <div class="input-group">
-            <input name="name" type="text" required/>
-
             <label>Jméno </label>
+            <input name="name" type="text" required/>
         </div>
 
         <div class="input-group">
-            <input name="surname" type="text" required/>
-
             <label>Přijmení </label>
+            <input name="surname" type="text" required/>
         </div>
-        <div class="input-group">
-            <input name="email" type="email" required/>
-            <label>Email </label>
 
+        <div class="input-group">
+            <label>Email </label>
+            <input name="email" type="email" required/>
         </div>
         <div class="input-group">
-            <input name="password" type="password" required/>
             <label>Heslo </label>
+            <input name="password" type="password" required/>
         </div>
         <div class="input-group">
-            <input name="city" type="text" required/>
             <label>Město </label>
+            <input name="city" type="text" required/>
         </div>
         <div class="input-group">
-            <input name="street" type="text" required/>
             <label>Ulice </label>
+            <input name="street" type="text" required/>
         </div>
+
         <div class="input-group">
-            <input name="home_number" type="number" required/>
             <label>Číslo popisné </label>
+            <input name="home_number" type="number" required/>
         </div>
         <div class="input-group">
+            <label>PSČ </label>
             <input name="zip" type="number" required/>
-            <label>PSČ </label>
         </div>
+
         <div class="input-group">
+            <label>Telefonní číslo </label>
             <input name="phone_number" type="number" required/>
-            <label>PSČ </label>
         </div>
 
 

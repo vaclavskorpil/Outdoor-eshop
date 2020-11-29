@@ -1,4 +1,4 @@
-<link rel="stylesheet" href="css/form.css">
+<link rel="stylesheet" href="css/order_form.css">
 <link rel="stylesheet" href="css/message.css">
 <?php
 
@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<section class="centeredContentWrapper">
+<section class="main">
     <h3 class="formTitle">Přihlášení</h3>
 
     <?php
@@ -30,15 +30,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form action="?page=<?php echo LOGIN ?>" method="post">
 
         <div class="input-group">
-            <input name="email" type="email" required/>
             <label>Email </label>
-
+            <input name="email" type="email" required/>
         </div>
         <div class="input-group">
-            <input name="heslo" type="password" required/>
             <label>Heslo </label>
+            <input name="heslo" type="password" required/>
         </div>
-
 
         <div class="row">
             <input class="button"

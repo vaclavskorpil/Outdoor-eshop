@@ -1,53 +1,52 @@
 <link rel="stylesheet" href="css/vertical_menu.css">
+<link rel="stylesheet" href="css/shop.css">
 
+<div class="shop-body">
 
+    <?php use services\CartController;
+    use services\ProductRepository;
 
-<div class="sidenav">
-    <?php
+    include_once "pages/side_nav.php" ?>
 
-    use entities\Category;
+    <div class="items-body">
+        <?php
+        $products = ProductRepository::getAllProductsByCategory(4);
+        if (isset($_POST["action"]) && $_POST["action"] == "add") {
+            CartController::addToCart($_POST["pid"]);
+            unset($_POST["action"]);
+            unset($_POST["pid"]);
 
-    function loadCategory(Category $category)
-    {
-
-        if (count($category->getChildren()) == 0) {
-            echo "<a href=#category={$category->getId()}>{$category->getName()} </a>";
-        } else {
-            echo "<button class='dropdown-btn'>{$category ->getName()}";
-            echo " </button>";
-            echo "<div class='dropdown-container'>";
-            foreach ($category->getChildren() as $cat) {
-                echo "<a href=#category={$cat->getId()}>{$cat->getName()} </a>";
-            }
-            echo "</div>";
         }
 
-    }
+        foreach ($products as $product):
+            ?>
+            <div class="shop-item">
+                <div class="detail">
+                    <a href="">
+                        <img src=<?php echo $product["image"] ?>>
+                        <div class="title">
+                            <? echo $product["name"] ?>
+                        </div>
+                    </a>
+                </div>
 
+                <div class="cena-bez-dph">
+                    Cena bez dph: <? echo $product["price"] ?>
+                </div>
 
-    $categories = Category::getAll();
+                <div class="cena-s-dph">
+                    Cena: <? echo $product["price_tax"] ?>
+                </div>
 
-    foreach ($categories as $category) {
-        loadCategory($category);
-    }
-    ?>
+                <form method="post">
+                    <input name="pid" type="hidden" value=<? echo $product["id"] ?>>
+                    <input name="action" type="hidden" value="add">
+                    <input type="submit" value="Přidej do košíku"/>
+                </form>
 
+            </div>
+        <?php endforeach; ?>
+    </div>
 
-    <script>
-        var dropdown = document.getElementsByClassName("dropdown-btn");
-        var i;
-
-        for (i = 0; i < dropdown.length; i++) {
-            dropdown[i].addEventListener("click", function () {
-                this.classList.toggle("active");
-                var dropdownContent = this.nextElementSibling;
-                if (dropdownContent.style.display === "block") {
-                    dropdownContent.style.display = "none";
-                } else {
-                    dropdownContent.style.display = "block";
-                }
-            });
-        }
-    </script>
 
 </div>
