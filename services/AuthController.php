@@ -52,6 +52,8 @@ class AuthController
 
     static function isAdmin(): bool
     {
+        if (!isset($_SESSION[USER_ID])) return false;
+
         $id = $_SESSION[USER_ID];
         $user = UserRepository::getById($id);
         if ($user == null) {

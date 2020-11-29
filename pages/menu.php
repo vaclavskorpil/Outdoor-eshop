@@ -14,11 +14,11 @@
         if (AuthController::isLoggedIn()) {
 
             echo "<a href='?page=profile'>Profil</a>";
+            echo "<a href='?page=my_orders'>Mé objednávky</a>";
             echo "<<a href='?page=logout' onclick=''>Odhlásit</a>";
 
-            if (AuthController::isAdmin()) {
-                echo "<a href='?page=adminControler'>Správa uživatelů</a>";
-            }
+
+
         } else {
             echo "<a href='?page=login' >Přihlásit</a>";
         } ?>

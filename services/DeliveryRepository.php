@@ -31,7 +31,7 @@ class DeliveryRepository
 
     }
 
-    public static function getById(int $id)
+    public static function getById($id)
     {
         $pdo = Connection::getPdoInstance();
         $stmt = $pdo->prepare("SELECT * FROM DELIVERY_INFO WHERE id = :id");
