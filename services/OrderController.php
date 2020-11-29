@@ -59,6 +59,11 @@ class OrderController
             ProductRepository::createOrderedProduct($orderId, $pid, $value["quantity"]);
         }
 
+
+        $_SESSION["cart"] = [];
+        unset($_SESSION["deliveryInfo"]);
+        unset($_SESSION["deliveryId"]);
+        unset($_SESSION["paymentId"]);
     }
 
 }

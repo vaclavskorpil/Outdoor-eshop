@@ -1,0 +1,56 @@
+.overflow {
+    overflow-x: auto;
+}
+
+a {
+    display: block;
+    text-decoration: none;
+    cursor: pointer;
+    color: black;
+    padding: 10px;
+}
+
+table {
+    width: 100%;
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+thead {
+    padding: 10px;
+    display: table-header-group;
+    vertical-align: middle;
+    horiz-align: left;
+    background-color: darkgrey;
+    color: white;
+
+}
+
+tbody {
+    margin-top: 10px;
+}
+
+th {
+    text-align: left;
+    padding: 10px;
+}
+
+tbody tr:hover {
+    background-color: #cccccc;
+}
+
+
+.button:hover {
+    color: white;
+    background-color: #401408;
+}
+
+.cell-padd {
+    padding: 10px;
+}
+
+.state {
+    display: flex;
+    padding: 5px;
+    background: darkseagreen;
+}

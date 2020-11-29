@@ -9,3 +9,10 @@
     display: flex;
     flex-wrap: wrap;
 }
+
+
+.total {
+    font-weight: bold;
+    background-color: lightgray;
+    font-size: 20px;
+}

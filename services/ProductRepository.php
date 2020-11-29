@@ -2,16 +2,11 @@
 
 namespace services;
 
-use http\Params;
+use PDO;
 
 class ProductRepository
 {
-    public static function getAllProducts()
-    {
-
-    }
-
-    public static function getAllProductsByCategory(int $category_id): array
+    public static function getAllProductsByCategory(?int $category_id): array
     {
         $pdo = Connection::getPdoInstance();
         $stmt = $pdo->prepare("WITH recursive all_prod as (
@@ -52,7 +47,7 @@ class ProductRepository
         );
         $stmt->bindParam(':category_id', $category_id);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     }
 
@@ -61,7 +56,7 @@ class ProductRepository
 
         $pdo = Connection::getPdoInstance();
         $stmt = $pdo->prepare(
-            "WITH recursive all_cat as (
+            " WITH recursive all_cat as (
                     select c.id, c.name, c.id_parent
                     from CATEGORY c
                     where id = 4
@@ -72,9 +67,9 @@ class ProductRepository
                     select *
                      from all_cat"
         );
-        $stmt->bindParam(':category_id', $category_id);
+        $stmt->bindParam(':category_id', $idCat);
         $stmt->execute();
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
     public static function getById(int $pid): array
@@ -85,7 +80,7 @@ class ProductRepository
         );
         $stmt->bindParam(':pid', $pid);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
 
@@ -98,7 +93,7 @@ class ProductRepository
         );
         $stmt->bindParam(':pid', $pid);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     /** @return array [name] [price] [price_tax] [tax] [image] of product */
@@ -110,7 +105,7 @@ class ProductRepository
         );
         $stmt->bindParam(':pid', $pid);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     public static function getDeliveryPrice($did): int
@@ -121,7 +116,7 @@ class ProductRepository
         );
         $stmt->bindParam(':did', $did);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC)["price"];
+        return $stmt->fetch(PDO::FETCH_ASSOC)["price"];
     }
 
     public static function getPaymentPrice($pid): int
@@ -132,7 +127,7 @@ class ProductRepository
         );
         $stmt->bindParam(':pid', $pid);
         $stmt->execute();
-        return $stmt->fetch(\PDO::FETCH_ASSOC)["price"];
+        return $stmt->fetch(PDO::FETCH_ASSOC)["price"];
     }
 
     /* public static function getChosenDelivery(): int
@@ -159,4 +154,53 @@ class ProductRepository
         $stmt->bindParam(':quantity', $quantity);
         $stmt->execute();
     }
+
+    public static function getAllOrderProducts(int $orderId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "select o.quantity ,(o.price * (o.tax/100+1)) as price , p.name from ORDERED_PRODUCT o left join PRODUCT p on p.id = o.id_product where id_order = :orderId"
+        );
+        $stmt->bindParam(':orderId', $orderId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function getAllProducts()
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "            select p.*,
+                                   a.width,
+                                   a.height,
+                                   a.depth,
+                                   a.id as id_attribute,
+                                   a.temperature_max,
+                                   a.temperature_min,
+                                   a.volume,
+                                   a.amount_of_people,
+                                   c.id_parent,
+                                
+                                   (p.price * (p.tax/100 +1)) as price_tax
+                            from PRODUCT p
+                                     inner join CATEGORY c on p.id_category = c.id
+                                     left join ATTRIBUTE a on p.id = a.id_product"
+        );
+        $stmt->bindParam(':orderId', $orderId);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    /** returns array [name] [parent_name]*/
+    public static function getCategoryNames(int $categoryId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "    select  c.name,(select b.name from CATEGORY b where b.id = c.id_parent ) as parent_name  from CATEGORY c where c.id = :id;
+        ");
+        $stmt->bindParam(':id', $categoryId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 }
