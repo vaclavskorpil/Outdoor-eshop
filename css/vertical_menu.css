@@ -1,6 +1,6 @@
 .sidenav {
     margin-top: 38px;
-    height: 80%;
+    height: 100%;
     width: 200px;
     position: fixed;
     z-index: 1;
@@ -30,11 +30,6 @@
     background-color: #401408;
 }
 
-.main {
-    margin-left: 200px;
-    font-size: 20px;
-    padding: 0px 10px;
-}
 
 .active {
     background-color: #401408;
@@ -45,5 +40,4 @@
     display: none;
     background-color: #464646;
     padding-left: 16px;
-
 }

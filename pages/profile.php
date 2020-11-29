@@ -14,10 +14,10 @@ if (AuthController::isLoggedIn()):
         $id = $_POST["id"];
     }
     if (isset($_POST["name"])) {
-        UserController::updateUserById($id, $_POST["name"], $_POST["surname"], $_POST["phone_number"], $_POST["city"], $_POST["street"], $_POST["home_number"], $_POST["zip"]);
+        UserRepository::updateUserById($id, $_POST["name"], $_POST["surname"], $_POST["phone_number"], $_POST["city"], $_POST["street"], $_POST["home_number"], $_POST["zip"]);
         header("Location: ?page=$destination");
     }
-    $user = UserController::getById($id);
+    $user = UserRepository::getById($id);
     ?>
 
 

@@ -1,0 +1,20 @@
+
+create view SLEEPING_BAG as
+select p.*, a.width,a.depth , a.weight, a.temperature_max, a.temperature_min from PRODUCT p inner join ATTRIBUTE a on p.id = a.id_product where p.id = 2;
+
+create view TENT as
+select p.*, a.width,a.depth , a.weight, a.height ,a.amount_of_person from PRODUCT p inner join ATTRIBUTE a on p.id = a.id_product where p.id = 1;
+
+WITH recursive all_cat as (
+    select c.id, c.name, c.id_parent
+    from CATEGORY c
+    where id = 4
+    union
+    select c.id, c.name, c.id_parent
+    from all_cat
+             inner join CATEGORY c on all_cat.id = c.id_parent
+)
+select *
+from all_cat;
+
+

@@ -2,11 +2,11 @@
 
 if (AuthController::isAdmin()): ?>
     <?php
-    $users = UserController::getAll();
+    $users = UserRepository::getAll();
 
 
     if(isset($_GET["action"]) && $_GET["action"] == "delete"){
-        UserController::deleteUser($_POST["id"]);
+        UserRepository::deleteUser($_POST["id"]);
         unset($_POST["id"]);
         header( "Location: ?page=".ADMIN_CONTROLER);
     }

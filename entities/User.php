@@ -10,6 +10,7 @@ class User
 {
     private int $id;
     private string $password;
+    private string $email;
     private DeliveryInfo $delivery_info;
     private int $role;
 

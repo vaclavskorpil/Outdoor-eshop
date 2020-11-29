@@ -1,0 +1,11 @@
+.cena-s-dph {
+    margin-top: 5px;
+    font-size: 20px;
+    margin-left: 5px;
+
+    color: red;
+}
+#cena{
+    display: flex;
+    flex-wrap: wrap;
+}

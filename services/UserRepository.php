@@ -6,7 +6,7 @@ use entities\User;
 use services\Connection;
 use services\Log;
 
-class UserController
+class UserRepository
 {
 
     static function getAll(): array
@@ -41,9 +41,7 @@ class UserController
     static function updateUserById($id, $name, $surname, $phone_number, $city, $street, $home_number, $zip)
     {
         try {
-            Log::write_line("updating");
             DeliveryInfo::updateByUserId($id, $name, $surname, $phone_number, $city, $street, $home_number, $zip);
-            Log::write_line("updated");
             Log::write_line($name);
         } catch (Exception $e) {
             var_dump($e);
@@ -60,9 +58,10 @@ class UserController
                 PASSWORD_DEFAULT);
             $deliId = $delivery->getId();
 
-            $stmt = $pdo->prepare("INSERT INTO USER SET password = :password , delivery_info = :delivery_info");
+            $stmt = $pdo->prepare("INSERT INTO USER SET email = :email, password = :password , delivery_info = :delivery_info");
             $stmt->bindParam(':password', $hashpass);
             $stmt->bindParam(':delivery_info', $deliId);
+            $stmt->bindParam(':email', $email);
             $stmt->execute();
             $id = $pdo->lastInsertId();
 
@@ -79,7 +78,6 @@ class UserController
     {
         try {
             $pdo = Connection::getPdoInstance();
-            var_dump($id);
             $stmt = $pdo->prepare("SELECT * FROM USER WHERE id =:id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
@@ -104,16 +102,13 @@ class UserController
         $stmt->execute();
     }
 
-    static function getByEmail($email)
+    static function getByEmail(string $email)
     {
-        $deli = DeliveryInfo::getByEmail($email);
-        $id = $deli->getId();
         $pdo = Connection::getPdoInstance();
-        $stmt = $pdo->prepare("SELECT * FROM USER WHERE delivery_info = :id");
-        $stmt->bindParam(':id', $id);
+        $stmt = $pdo->prepare("select * from USER where email =:email");
+        $stmt->bindParam(':email', $email);
         $stmt->execute();
-        $row = $stmt->fetch();
-        return User::load($row);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
     static function getEmail($id): string
@@ -125,5 +120,19 @@ class UserController
         $userRow = $stmt->fetch();
         return $userRow["email"];
 
+    }
+
+    static function getUsersDeliveryInfo($id): array
+    {
+        try {
+            $pdo = Connection::getPdoInstance();
+            var_dump($id);
+            $stmt = $pdo->prepare("SELECT i.* FROM USER u inner join DELIVERY_INFO i on u.delivery_info = i.id WHERE u.id =:id");
+            $stmt->bindParam(':id', $id);
+            $stmt->execute();
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            Log::write_line($e);
+        }
     }
 }

@@ -7,8 +7,6 @@
     <div id="hamitems">
         <a href="?page=<? echo SHOP ?>">Obchod</a>
         <a href="?page=<? echo REGISTER ?>">Registrovat</a>
-
-
         <?
 
         use services\AuthController;
@@ -24,7 +22,6 @@
         } else {
             echo "<a href='?page=login' >Přihlásit</a>";
         } ?>
-
+        <a href="?page=cart">Košík</a>
     </div>
-
 </nav>
