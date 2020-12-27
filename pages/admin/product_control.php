@@ -5,8 +5,12 @@ use services\ProductRepository;
 if (AuthController::isAdmin()): ?>
 
     <?php
-    $products = ProductRepository::getAllProducts()
+    $products = ProductRepository::getAllProducts();
 
+    if(isset($_POST["deleteId"])){
+        ProductRepository::deleteProduct($_POST["deleteId"]);
+        unset($_POST["deleteId"]);
+    }
     ?>
     <link rel="stylesheet" href="css/basic_table.css">
     <link rel="stylesheet" href="css/product.css">
@@ -27,6 +31,7 @@ if (AuthController::isAdmin()): ?>
                     <th> Kategorie</th>
                     <th> Cena</th>
                     <th> Dph</th>
+                    <th></th>
 
                 </tr>
                 </thead>
@@ -39,27 +44,34 @@ if (AuthController::isAdmin()): ?>
                     <tr>
                         <td class="img-column">
                             <a
-                                    href="?page=product_detail&productId=<? echo $product["id"] ?>">
+                                    href="?page=detail&productId=<? echo $product["id"] ?>">
                                 <img class="img-tiny" src=<?php echo $product["image"] ?>>
                             </a>
 
                         </td>
                         <td>
-                            <a href="?page=product_detail&productId=<? echo $product["id"] ?>">   <? echo $product["name"] ?> </a>
+                            <a href="?page=detail&productId=<? echo $product["id"] ?>">   <? echo $product["name"] ?> </a>
                         </td>
                         <td>
-                            <a href="?page=product_detail&productId=<? echo $product["id"] ?>"> <? echo $category["parent_name"] . " " . $category["name"] ?></a>
+                            <a href="?page=detail&productId=<? echo $product["id"] ?>"> <? echo $category["parent_name"] . " " . $category["name"] ?></a>
                         </td>
                         <td>
-                            <a href="?page=product_detail&productId=<? echo $product["price"] ?>">
+                            <a href="?page=detail&productId=<? echo $product["price"] ?>">
                                 <? echo $product["price"] ?> Kč
                             </a>
                         </td>
 
                         <td>
-                            <a href="?page=product_detail&productId=<? echo $product["price"] ?>">
+                            <a href="?page=detail&productId=<? echo $product["price"] ?>">
                                 <? echo $product["tax"] ?> %
                             </a>
+                        </td>
+
+                        <td style="width: 80px">
+                                <form method="post">
+                                    <input type="hidden" name="deleteId" value=<? echo $product["id"] ?>>
+                                    <input type="submit" value="Smaž">
+                                </form>
                         </td>
                     </tr>
 

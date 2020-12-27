@@ -2,13 +2,9 @@
 
 namespace services;
 
-use entities\DeliveryInfo;
-use services\Connection;
-use services\Log;
-
 class DeliveryRepository
 {
-    static function create(string $name, string $surname, string $email, int $phone_number, string $city, string $street, int $home_number, int $zip): int
+    static function create(string $name, string $surname, string $email, int $phone_number, string $city, string $street, int $home_number, int $zip, ?int $idUser): int
     {
 
         $pdo = Connection::getPdoInstance();
@@ -16,7 +12,7 @@ class DeliveryRepository
                     SET name=:name , surname = :surname , email = :email 
                         , phone_number = :phone_number , city = :city,
                         street = :street , home_number = :home_number,
-                        zip = :zip");
+                        zip = :zip, id_user = :id_user");
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':surname', $surname);
         $stmt->bindParam(':email', $email);
@@ -25,6 +21,7 @@ class DeliveryRepository
         $stmt->bindParam(':street', $street);
         $stmt->bindParam(':home_number', $home_number);
         $stmt->bindParam(':zip', $zip);
+        $stmt->bindParam(':id_user', $idUser);
         $stmt->execute();
 
         return $pdo->lastInsertId();
@@ -43,7 +40,7 @@ class DeliveryRepository
     public static function getByUserId(int $uid)
     {
         $pdo = Connection::getPdoInstance();
-        $stmt = $pdo->prepare("SELECT d.* FROM USER u left join DELIVERY_INFO d on u.delivery_info = d.id WHERE u.id = :id");
+        $stmt = $pdo->prepare("SELECT * from DELIVERY_INFO WHERE id = :id");
         $stmt->bindParam(':id', $uid);
         $stmt->execute();
         return $stmt->fetch(\PDO::FETCH_ASSOC);
@@ -59,4 +56,13 @@ class DeliveryRepository
         $stmt->execute();
         return $pdo->lastInsertId();
     }
+
+    public static function deleteDeliveryInfo($deliveryId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("DELETE FROM DELIVERY_INFO WHERE id = :id");
+        $stmt->bindParam(':id', $deliveryId);
+        $stmt->execute();
+    }
+
 }

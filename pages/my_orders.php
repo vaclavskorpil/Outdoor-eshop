@@ -24,8 +24,6 @@
                 </thead>
                 <tbody>
                 <? foreach ($orders as $order): ?>
-
-
                     <tr>
                         <td><a href="?page=order_detail&orderId=<? echo $order["id"] ?>">   <? echo $order["id"] ?> </a>
                         </td>

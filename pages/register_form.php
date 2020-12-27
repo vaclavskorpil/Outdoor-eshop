@@ -4,7 +4,7 @@
 
 use services\AuthController;
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST["email"])) {
     $name = $_POST["name"];
     $surname = $_POST["surname"];
     $email = $_POST["email"];
@@ -15,11 +15,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $zip = $_POST["zip"];
     $phoneNumber = $_POST["phone_number"];
 
-    $user = AuthController::register($password, $name
+    $userId = AuthController::register($password, $name
         , $surname, $email, $phoneNumber,
         $city, $street, $homeNumber, $zip);
-
-    if ($user == null) {
+    unset($_POST["email"]);
+    if ($userId == null) {
         $_SESSION[MESSAGE] = "Uživatel s tímto emailem je již registrován.";
     }
 }
@@ -36,7 +36,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     ?>
 
     <form action="?page=<?php echo REGISTER ?>" method="post">
-
 
         <div class="input-group">
             <label>Jméno </label>
@@ -86,6 +85,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                    value="Registrovat"
             >
         </div>
-
     </form>
 </section>

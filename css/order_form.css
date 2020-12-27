@@ -1,3 +1,13 @@
+.input-group {
+    display: block;
+}
+label{
+    font-size: 18px;
+}
+input{
+    font-size: 18px;
+}
+
 input[type=text], input[type=number], input[type=email], input[type=password] {
     width: 100%;
     padding: 12px 20px;
@@ -27,3 +37,23 @@ input[type=submit]:hover {
 
 }
 
+.textArea {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+select {
+    padding:  0 12px;
+    width: 250px;
+    font-size: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    height: 40px;
+}
+
+.basic-table{
+    width: 100%;
+}

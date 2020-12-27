@@ -4,17 +4,14 @@ use services\DeliveryRepository;
 use services\OrderController;
 
 
-if (isset($_SESSION["deliveryInfo"])) {
-    $deliveryInfo = DeliveryRepository::getById($_SESSION["deliveryInfo"]);
-} elseif (isset($_SESSION["useMyProfile"])) {
-    var_dump($_SESSION[USER_ID]);
-    $deliveryInfo = DeliveryRepository::getByUserId($_SESSION[USER_ID]);
+if (isset($_SESSION["deliveryInfoId"])) {
+    $deliveryInfo = DeliveryRepository::getById($_SESSION["deliveryInfoId"]);
 }
 
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     OrderController::createOrder();
-    $POST["orderCreated"] = True;
+    $POST["orderCreated"] = true;
 }
 
 ?>

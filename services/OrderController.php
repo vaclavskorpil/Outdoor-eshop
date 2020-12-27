@@ -37,23 +37,13 @@ class OrderController
 
     static function createOrder()
     {
-        $userId = null;
         $deliveryId = null;
         $paymentMethod = 1;
         $deliveryMethod = 1;
 
-        if (isset($_SESSION[USER_ID])) {
-            $userId = $_SESSION[USER_ID];
-        }
+        $deliveryId = $_SESSION["deliveryInfoId"];
 
-        if (isset($_SESSION["useMyProfile"])) {
-            $info = UserRepository::getUsersDeliveryInfo($_SESSION[USER_ID]);
-            $deliveryId = DeliveryRepository::copyRow($info["id"]);
-        } else {
-            $deliveryId = $_SESSION["deliveryInfo"];
-        }
-
-        $orderId = OrderRepository::createOrder($deliveryId, $userId, $paymentMethod, $deliveryMethod, self::getTotalCost());
+        $orderId = OrderRepository::createOrder($deliveryId, $paymentMethod, $deliveryMethod, self::getTotalCost());
 
         foreach ($_SESSION["cart"] as $pid => $value) {
             ProductRepository::createOrderedProduct($orderId, $pid, $value["quantity"]);
@@ -65,5 +55,7 @@ class OrderController
         unset($_SESSION["deliveryId"]);
         unset($_SESSION["paymentId"]);
     }
+
+
 
 }

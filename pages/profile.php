@@ -1,7 +1,11 @@
 <link rel="stylesheet" href="css/order_form.css">
+<link rel="stylesheet" href="css/profile.css">
+<link rel="stylesheet" href="css/basic_table.css">
 <?php
 
 use services\AuthController;
+use services\DeliveryRepository;
+use services\OrderRepository;
 
 if (AuthController::isLoggedIn()):
 
@@ -10,69 +14,154 @@ if (AuthController::isLoggedIn()):
 
     if (isset($_GET["action"])) {
         $destination = ADMIN_CONTROLER;
-
         $id = $_POST["id"];
     }
     if (isset($_POST["name"])) {
-        UserRepository::updateUserById($id, $_POST["name"], $_POST["surname"], $_POST["phone_number"], $_POST["city"], $_POST["street"], $_POST["home_number"], $_POST["zip"]);
         header("Location: ?page=$destination");
     }
-    $user = UserRepository::getById($id);
+    if (isset($_POST["newpass"])) {
+        UserRepository::changeUserPass($id, $_POST["newpass"]);
+    }
+
+
+    $user = UserRepository::getUserById($id);
     ?>
 
 
     <section class="main">
-        <h3 class="formTitle">Profil
-            uživatele <? echo $user->getDeliveryInfo()->getName() . " " . $user->getDeliveryInfo()->getSurname() ?></h3>
-        <form method="post">
-            <div class="input-group">
-                <label>Jméno </label>
-                <input name="name" type='text' required value=<? echo $user->getDeliveryInfo()->getName() ?> required/>
+        <h2>
+            Profil uživatele
+        </h2>
+        <div>
+            <div id="user-email">Email: <? echo $user["email"] ?></div>
+            <div id="pass-validation-text" class="error-text"></div>
+            <div id="change-password-div">
+                <form method="post">
+                    <label>Nové heslo
+                        <input id="new-password" name="newpass" type="text">
+                    </label>
+                    <label>
+                        Zadejte nové heslo znovu
+                        <input id="pass-again" type="text" onkeyup="passValidation()">
+                    </label>
+                    <input id="save-pass-btn" type="submit" value="Ulož heslo">
+                </form>
             </div>
+            <button id="change-pass-btn" class="basic-button"
+                    onclick="showChangePassDialog()">Změň heslo
+            </button>
+        </div>
+        <h3>Dodací info</h3>
+        <? $deliveryInfo = UserRepository::getUsersDeliveryInfo($id); ?>
+        <div class="delivery-info-block">
+            <? foreach ($deliveryInfo as $info): ?>
+                <div class="delivery-info-card">
+                    <div>
+                        Jméno: <? echo $info["name"] ?>
+                    </div>
+                    <div>
+                        Příjmení: <? echo $info["surname"] ?>
+                    </div>
 
-            <div class="input-group">
-                <input name="id" type='hidden' required value=<? echo $user->getId() ?>>
-            </div>
+                    <div>
+                        Kontaktní email: <? echo $info["email"] ?>
+                    </div>
+                    <div>
+                        Telefonní číslo: <? echo $info["phone_number"] ?>
+                    </div>
 
-            <div class="input-group">
-                <label>Přijmení </label>
-                <input name="surname" type="text" value=<? echo $user->getDeliveryInfo()->getSurname() ?> required/>
-            </div>
-            <div class="input-group">
-                <label>Město </label>
-                <input name="city" type="text" value=<? echo $user->getDeliveryInfo()->getCity() ?> required/>
-            </div>
-            <div class='input-group'>
-                <label>Ulice </label>
-                <input name='street' type='text' value=<? echo $user->getDeliveryInfo()->getStreet() ?> required/>
-            </div>
+                    <div>
+                        Adresa:
+                    </div>
 
-            <div class='input-group'>
-                <label>Číslo popisné </label>
-                <input name='home_number' type='number'
-                       value=<? echo $user->getDeliveryInfo()->getHomeNumber() ?> required/>
-            </div>
+                    <div>
+                        <? echo $info["street"] . " " . $info["home_number"] ?>
+                    </div>
+                    <div>
+                        <? echo $info["zip"] . " " . $info["city"] ?>
+                    </div>
 
-            <div class='input-group'>
-                <label>PSČ </label>
-                <input name='zip' type='number' value=<? echo $user->getDeliveryInfo()->getZip() ?> required/>
-            </div>
+                </div>
+            <? endforeach; ?>
+
+        </div>
+        <h2>Mé objednávky</h2>
+        <?php
 
 
-            <div class='input-group'>
-                <label>Telefonní číslo </label>
-                <input name='phone_number' type='number' value=<? echo $user->getPhoneNumber() ?> required/>
-            </div>
+        if (isset($_SESSION[USER_ID])):
+        $orders = OrderRepository::getUserOrders($_SESSION[USER_ID]);
+        ?>
+        <? if (sizeof($orders) != 0): ?>
+            <div class="overflow">
+                <table class="basic-table">
+
+                    <thead>
+                    <tr>
+                        <th> Číslo objednávky</th>
+                        <th> Stav objednávky</th>
+                        <th> Datum objednání</th>
+                        <th> Celková cena</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <? foreach ($orders as $order): ?>
 
 
-            <div class='row'>
-                <input class='button'
-                       type='submit'
-                       value='Změmit údaje'
-                >
-            </div>
+                        <tr>
+                            <td>
+                                <a href="?page=order_detail&orderId=<? echo $order["id"] ?>">   <? echo $order["id"] ?> </a>
+                            </td>
+                            <td>
+                                <a href="?page=order_detail&orderId=<? echo $order["id"] ?>"><? echo $order["status"] ?></a>
+                            </td>
+                            <td>
+                                <a href="?page=order_detail&orderId=<? echo $order["id"] ?>"><? echo $order["order_datetime"] ?></a>
+                            </td>
+                            <td><a href="?page=order_detail&orderId=<? echo $order["id"] ?>"><? echo $order["price"] ?>
+                                    Kč</a></td>
 
-        </form>
+                        </tr>
+
+
+                    <? endforeach; ?>
+                    </tbody>
+
+                </table>
+            </div>;
+        <?php else: ?>
+
+            <h3>
+                Nemáte žádné objednávky.
+            </h3>
+        <?php endif; ?>
     </section>
+
+    <script>
+
+        function showChangePassDialog() {
+            document.getElementById('change-password-div').style.display = 'block'
+            document.getElementById('change-pass-btn').style.display = 'none'
+        }
+
+        function passValidation() {
+            let newPass = document.getElementById("new-password").value;
+            let newPassAgain = document.getElementById("pass-again").value;
+            if (newPass.length > 0) {
+                if (newPass === newPassAgain) {
+                    document.getElementById("save-pass-btn").style.display = 'block';
+                    document.getElementById("pass-validation-text").style.color = '#00ff00';
+                    document.getElementById("pass-validation-text").innerHTML = "Hesla jsou stejná";
+                } else {
+                    document.getElementById("save-pass-btn").style.display = 'none';
+                    document.getElementById("pass-validation-text").innerHTML = "Hesla nejsou stejná";
+                    document.getElementById("pass-validation-text").style.color = '#ff0000';
+                }
+            }
+        }
+
+    </script>
+<?php endif; ?>
 <?php endif; ?>
 

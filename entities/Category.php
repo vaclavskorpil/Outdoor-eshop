@@ -110,7 +110,7 @@ class Category
         }
     }
 
-    public static function getAll(): array
+    public static function getAllRootCats(): array
     {
 
         $pdo = Connection::getPdoInstance();
