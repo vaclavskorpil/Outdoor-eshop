@@ -1,10 +1,9 @@
 <?php
 
 
-use entities\DeliveryInfo;
-use entities\User;
+use entities\Role;
 use services\Connection;
-use services\Log;
+
 
 class UserRepository
 {
@@ -15,80 +14,46 @@ class UserRepository
             $conn = Connection::getPdoInstance();
             $stmt = $conn->prepare("SELECT * FROM USER");
             $stmt->execute();
-            $users_row = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-            $users = array();
-            foreach ($users_row as $user) {
-                array_push($users, User::load($user));
-            }
-            return $users;
         } catch (Exception $e) {
             var_dump($e);
-            Log::write_line($e);
+            return [];
         }
     }
 
-    static function updateUserByEmail($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip)
+    static function updateUserById($id, $name, $surname, $phone_number, $city, $street, $home_number, $zip, $email)
     {
         try {
-            DeliveryInfo::update($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip);
+            self::updateDeliveryInfo($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip, $id);
         } catch (Exception $e) {
             var_dump($e);
-            Log::write_line($e);
         }
     }
 
-    static function updateUserById($id, $name, $surname, $phone_number, $city, $street, $home_number, $zip)
+    static function createUser($password, $name, $surname, $email, $phone_number, $city, $street, $home_number, $zip, $role = Role::user): ?int
     {
         try {
-            DeliveryInfo::updateByUserId($id, $name, $surname, $phone_number, $city, $street, $home_number, $zip);
-            Log::write_line($name);
-        } catch (Exception $e) {
-            var_dump($e);
-            Log::write_line($e);
-        }
-    }
+            $userId = self::createUserRow($password, Role::user, $email);
+            self::createDeliveryInfo($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip, $userId);
 
-    static function createUser($password, $name, $surname, $email, $phone_number, $city, $street, $home_number, $zip): ?User
-    {
-        try {
-            $pdo = Connection::getPdoInstance();
-            $delivery = DeliveryInfo::createRow($name, $surname, $email, $phone_number, $city, $street, $home_number, $zip);
-            $hashpass = password_hash($password,
-                PASSWORD_DEFAULT);
-            $deliId = $delivery->getId();
-
-            $stmt = $pdo->prepare("INSERT INTO USER SET email = :email, password = :password , delivery_info = :delivery_info");
-            $stmt->bindParam(':password', $hashpass);
-            $stmt->bindParam(':delivery_info', $deliId);
-            $stmt->bindParam(':email', $email);
-            $stmt->execute();
-            $id = $pdo->lastInsertId();
-
-            return User::create($id, $hashpass, $delivery, 1);
+            return $userId;
         } catch (\Exception $e) {
             var_dump($e);
-            Log::write_line($e);
             return null;
         }
 
     }
 
-    static function getById($id): ?User
+    static function getUserById($id)
     {
         try {
             $pdo = Connection::getPdoInstance();
             $stmt = $pdo->prepare("SELECT * FROM USER WHERE id =:id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-            $userRow = $stmt->fetch();
-
-            if ($userRow != false) {
-                return User::load($userRow);
-            }
-            return null;
+            return $stmt->fetch(PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
-            Log::write_line($e);
             var_dump($e);
         }
     }
@@ -111,28 +76,88 @@ class UserRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    static function getEmail($id): string
-    {
-        $pdo = Connection::getPdoInstance();
-        $stmt = $pdo->prepare("SELECT email FROM USER_DELIVERY where id =:id");
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        $userRow = $stmt->fetch();
-        return $userRow["email"];
-
-    }
 
     static function getUsersDeliveryInfo($id): array
     {
         try {
             $pdo = Connection::getPdoInstance();
-            var_dump($id);
-            $stmt = $pdo->prepare("SELECT i.* FROM USER u inner join DELIVERY_INFO i on u.delivery_info = i.id WHERE u.id =:id");
+            $stmt = $pdo->prepare("SELECT i.* FROM DELIVERY_INFO i WHERE i.id_user =:id");
             $stmt->bindParam(':id', $id);
             $stmt->execute();
-            return $stmt->fetch(PDO::FETCH_ASSOC);
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
         } catch (\Exception $e) {
-            Log::write_line($e);
+
         }
+    }
+
+    public static function updateDeliveryInfo($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip, $userId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("UPDATE DELIVERY_INFO SET name =:name , surname =:surname , city :=city, street =:street , home_number:= home_number ,zip =:zip, email = :email where id_user = :id_user");
+
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':surname', $surname);
+        $stmt->bindParam(':street', $street);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':home_number', $home_number);
+        $stmt->bindParam(':phone_number', $phone_number);
+        $stmt->bindParam(':zip', $zip);
+        $stmt->bindParam(':id_user', $userId);
+        $stmt->execute();
+    }
+
+    public static function createDeliveryInfo($email, $name, $surname, $phone_number, $city, $street, $home_number, $zip, $userId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("INSERT INTO DELIVERY_INFO(name, surname , city, street , home_number,zip , email , id_user, phone_number ) VALUES(:name , :surname , :city, :street , :home_number ,:zip, :email, :id_user, :phone_number)");
+
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':surname', $surname);
+        $stmt->bindParam(':street', $street);
+        $stmt->bindParam(':city', $city);
+        $stmt->bindParam(':home_number', $home_number);
+        $stmt->bindParam(':phone_number', $phone_number);
+        $stmt->bindParam(':zip', $zip);
+        $stmt->bindParam(':id_user', $userId);
+        $stmt->bindParam(':phone_number', $phone_number);
+
+        $stmt->execute();
+    }
+
+    public static function createUserRow($password, $role, $email)
+    {
+        $hashpass = password_hash($password,
+            PASSWORD_DEFAULT);
+
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("insert into USER(email, password,role) values (:email,:password,:role)");
+        $stmt->bindParam(':password', $hashpass);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':role', $role);
+        $stmt->execute();
+        return $pdo->lastInsertId();
+    }
+
+    public static function getUserRole($uid): string
+    {
+
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("select role from USER where id = :id");
+        $stmt->bindParam(':id', $uid);
+        $stmt->execute();
+        return $stmt->fetch()["role"];
+    }
+
+    public static function changeUserPass($uid, $password)
+    {
+        $pdo = Connection::getPdoInstance();
+        $hashpass = password_hash($password,
+            PASSWORD_DEFAULT);
+        $stmt = $pdo->prepare("UPDATE USER SET password =:password where id = :id");
+        $stmt->bindParam(':id', $uid);
+        $stmt->bindParam(':password', $hashpass);
+        $stmt->execute();
     }
 }

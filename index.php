@@ -1,23 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <?php
+include_once "head.php";
 include_once "includes.php";
 
 session_start();
 ?>
-<body>
+<body style="background: #757575">
 <?php
 
 use entities\Product;
 use entities\user;
 use services\AuthController;
-use services\ProductRepository;
 
+if (!isset($_GET["page"])) {
+    header("Location:?page=shop");
+}
 
 if (isset($_GET["page"]) && $_GET["page"] == LOGOUT) {
     include "elements/logout.php";
 }
-
+include "pages/menu.php";
 if (AuthController::isAdmin()) {
     include "pages/admin/admin_menu.php";
 
@@ -35,16 +39,13 @@ if (AuthController::isAdmin()) {
             case "add_product":
                 include "pages/admin/add_product.php";
                 break;
+            case "edit_product":
+                include "pages/admin/edit_product.php";
+                break;
         }
     }
-} else {
-    include "pages/menu.php";
 }
 
-
-if (!isset($_SESSION["cart"])) {
-    $_SESSION["cart"] = [];
-}
 
 if (isset($_GET["page"])) {
     switch ($_GET["page"]) {
@@ -61,6 +62,7 @@ if (isset($_GET["page"])) {
             include "pages/cart.php";
             break;
         case SHOP:
+        case "detail":
             include "pages/shop.php";
             break;
         case "order_info":
@@ -75,6 +77,13 @@ if (isset($_GET["page"])) {
         case "order_detail":
             include "pages/order_detail.php";
             break;
+        case "edit_delivery_info":
+            include "pages/edit_delivery_info.php";
+            break;
+        case "choose_delivery":
+            include "pages/choose_delivery.php";
+            break;
+
     }
 
 }

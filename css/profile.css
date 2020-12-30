@@ -1,0 +1,25 @@
+#change-password-div {
+    width: 300px;
+    display: none;
+}
+
+#user-email {
+    margin-bottom: 10px;
+}
+
+#save-pass-btn {
+    display: none;
+}
+
+.delivery-info-block {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.delivery-info-card {
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 10px;
+    background: #bbbbbb;
+}

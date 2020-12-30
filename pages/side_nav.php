@@ -1,34 +1,22 @@
 <div class="sidenav">
     <?php
 
-    use entities\Category;
-    use services\CartController;
     use services\ProductRepository;
 
-    function loadCategory(Category $category)
-    {
-
-        if (count($category->getChildren()) == 0) {
-            echo "<a href=#category={$category->getId()}>{$category->getName()} </a>";
-        } else {
-            echo "<button class='dropdown-btn'>{$category ->getName()}";
-            echo " </button>";
-            echo "<div class='dropdown-container'>";
-            foreach ($category->getChildren() as $cat) {
-                echo "<a href=#category={$cat->getId()}>{$cat->getName()} </a>";
-            }
-            echo "</div>";
-        }
-
-    }
-
-
-    $categories = Category::getAll();
-
-    foreach ($categories as $category) {
-        loadCategory($category);
-    }
-    ?>
+    $rootCats = ProductRepository::getAllRootCategories();
+    foreach ($rootCats as $root):
+        $children = ProductRepository::getCategoriesOneLevelBellow($root["id"]);
+        ?>
+        <button class='root-btn'>
+            <a href=?page=shop&category=<? echo $root["id"] ?>><? echo $root["name"] ?></a>
+            <img class="dropdown" src="images/dropdown.png">
+        </button>
+        <div id=<? echo $root["id"] ?> class="dropdown-container">
+            <? foreach ($children as $child): ?>
+                <a href=?page=shop&category=<? echo $child["id"] ?>><? echo $child["name"] ?></a>
+            <? endforeach; ?>
+        </div>
+    <? endforeach; ?>
 
     <div class="cart">
         <a href="?page=cart" id="cart-title">
@@ -56,13 +44,15 @@
         </a>
     </div>
     <script>
-        var dropdown = document.getElementsByClassName("dropdown-btn");
+        var dropdown = document.getElementsByClassName("root-btn");
         var i;
 
         for (i = 0; i < dropdown.length; i++) {
             dropdown[i].addEventListener("click", function () {
                 this.classList.toggle("active");
+
                 var dropdownContent = this.nextElementSibling;
+                console.log(dropdownContent);
                 if (dropdownContent.style.display === "block") {
                     dropdownContent.style.display = "none";
                 } else {
