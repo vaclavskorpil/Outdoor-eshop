@@ -9,5 +9,5 @@ include_once "services/CartController.php";
 include_once "services/DeliveryRepository.php";
 include_once "services/FileRepository.php";
 include_once "services/OrderRepository.php";
-include_once "entities/Category.php";
+
 include_once "entities/Role.php";

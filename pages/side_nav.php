@@ -1,8 +1,6 @@
 <div class="sidenav">
     <?php
 
-    use entities\Category;
-    use services\CartController;
     use services\ProductRepository;
 
     $rootCats = ProductRepository::getAllRootCategories();

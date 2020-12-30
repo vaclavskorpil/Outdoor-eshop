@@ -112,4 +112,40 @@ class OrderRepository
         $stmt->execute();
     }
 
+    static function getPaymentName($id)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("SELECT name from PAYMENT_METHOD where id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)["name"];
+    }
+
+    static function getDeliveryMethodName($id)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("SELECT name from DELIVERY_METHOD where id = :id");
+        $stmt->bindParam(":id", $id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC)["name"];
+    }
+
+    static function getPaymentMethodForOrder($orderId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("SELECT PM.* from SHOP_ORDER o inner join PAYMENT_METHOD PM on o.id_payment_method = PM.id where o.id = :id");
+        $stmt->bindParam(":id", $orderId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
+    static function getDeliveryMethodForOrder($orderId)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare("SELECT PM.* from SHOP_ORDER o inner join DELIVERY_METHOD PM on o.id_delivery_method = PM.id where o.id = :id");
+        $stmt->bindParam(":id", $orderId);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+
 }

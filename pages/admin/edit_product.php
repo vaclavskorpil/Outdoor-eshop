@@ -4,7 +4,6 @@
 
     <?php
 
-    use entities\Category;
     use services\FileRepository;
     use services\ProductRepository;
 

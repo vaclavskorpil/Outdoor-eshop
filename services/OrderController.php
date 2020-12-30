@@ -30,9 +30,14 @@ class OrderController
         }
 
         if (isset($_SESSION["paymentId"])) {
-            $total += ProductRepository::getDeliveryPrice($_SESSION["paymentId"]);
+            $total += ProductRepository::getPaymentPrice($_SESSION["paymentId"]);
         }
         return $total;
+    }
+
+    static function canOrder(): bool
+    {
+        return (isset($_SESSION["deliveryId"]) && isset($_SESSION["paymentId"]));
     }
 
     static function createOrder()
@@ -55,7 +60,6 @@ class OrderController
         unset($_SESSION["deliveryId"]);
         unset($_SESSION["paymentId"]);
     }
-
 
 
 }

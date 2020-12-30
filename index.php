@@ -80,6 +80,10 @@ if (isset($_GET["page"])) {
         case "edit_delivery_info":
             include "pages/edit_delivery_info.php";
             break;
+        case "choose_delivery":
+            include "pages/choose_delivery.php";
+            break;
+
     }
 
 }

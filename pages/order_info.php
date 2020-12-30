@@ -33,43 +33,6 @@
         }
         header("Location: ?page=recapitulation");
     }
-    ?>
-
-    <!--
-
-
-            <?php /*use services\OrderController;
-        use services\AuthController;
-
-        $methods = OrderController::getDeliveryMethods();
-        foreach ($methods
-
-                 as $method):
-            */ ?>
-            <input type="radio" id=<? /* echo $method["name"] */ ?> name="delivery" value=<? /* echo $method["id"] */ ?>>
-            <div>
-                <label for=<? /* echo $method["name"] */ ?>><? /* echo $method["name"] */ ?></label>
-            </div><br>
-
-        <? /* endforeach; */ ?>
-
-        <h3>
-            Typ platby
-        </h3>
-        <?php
-    /*
-            $methods = OrderController::getPaymentMethods();
-            foreach ($methods as $method):*/ ?>
-
-            <input type="radio" id=<? /* echo $method["name"] */ ?> name="payment" value=<? /* echo $method["id"] */ ?>>
-            <label for=<? /* echo $method["name"] */ ?>><? /* echo $method["name"] */ ?></label><br>
-
-        --><? /* endforeach; */ ?>
-
-    <h2>
-        Zadejte dodací ůdaje.
-    </h2>
-    <?
 
     if (AuthController::isLoggedIn()):
         ?>

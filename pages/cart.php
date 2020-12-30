@@ -100,15 +100,14 @@
     <div class="price-row">
         <div class="price">
             <div class="cena-bez-dph">
-
-                Celkem bez dph: <? ;
+                Celkem bez dph: <?
                 echo $totalPrice ?> Kč
             </div>
             <div class="cena-s-dph">
                 Celkem: <? echo $totalPriceDph ?> Kč
             </div>
         </div>
-        <a href="?page=order_info" class="continue">
+        <a href="?page=choose_delivery" class="continue">
             <button>
                 Pokračuj v objednávce
             </button>

@@ -23,6 +23,8 @@ if (isset($_GET["orderId"])):
     <?php
     $order = OrderRepository::getOrderDetail($_GET["orderId"]);
     $deliveryInfo = DeliveryRepository::getById($order["delivery_info"]);
+    $paymentMethod = OrderRepository::getPaymentMethodForOrder($order["id"]);
+    $deliveryMethod = OrderRepository::getDeliveryMethodForOrder($order["id"]);
     ?>
     <link rel="stylesheet" href="css/order_recap.css">
     <link rel="stylesheet" href="css/basic_table.css">
@@ -112,6 +114,44 @@ if (isset($_GET["orderId"])):
 
 
             <? endforeach; ?>
+
+            <tr>
+                <td class="cell-padd">
+                    <? echo $deliveryMethod["name"] ?>
+                </td>
+                <td class="cell-padd">
+                    <? echo $deliveryMethod["price"] ?> Kč
+                </td>
+
+
+                <td class="cell-padd">
+                    1 Ks
+                </td>
+
+                <td class="cell-padd">
+                    <? echo $deliveryMethod["price"] ?> Kč
+                </td>
+            </tr>
+
+            <tr>
+                <td class="cell-padd">
+                    <? echo $paymentMethod["name"] ?>
+                </td>
+                <td class="cell-padd">
+                    <? echo $paymentMethod["price"] ?> Kč
+                </td>
+
+
+                <td class="cell-padd">
+                    1 Ks
+                </td>
+
+                <td class="cell-padd">
+                    <? echo $paymentMethod["price"] ?> Kč
+                </td>
+            </tr>
+
+
             <tr class="total">
                 <td class="cell-padd"> Součet</td>
                 <td class="cell-padd"></td>
