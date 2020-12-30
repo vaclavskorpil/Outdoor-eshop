@@ -221,6 +221,22 @@ class ProductRepository
         return $pdo->lastInsertId();
     }
 
+    public static function editProduct($id, int $idCategory, string $price, string $name, ?string $description, ?string $image, float $tax)
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "UPDATE PRODUCT set id_category=:id_category, price=:price, name=:name, description=:description, image=:image, tax =:tax where id= :id ");
+
+        $stmt->bindParam(':id_category', $idCategory);
+        $stmt->bindParam(':price', $price);
+        $stmt->bindParam(':name', $name);
+        $stmt->bindParam(':description', $description);
+        $stmt->bindParam(':image', $image);
+        $stmt->bindParam(':tax', $tax);
+        $stmt->bindParam(':id', $id);
+        $stmt->execute();
+    }
+
     public static function createAttribute($width, $height, $depth, $temperature_max, $temperature_min, $volume, $amountOfPeople, $weight): int
     {
         $pdo = Connection::getPdoInstance();
@@ -236,6 +252,25 @@ class ProductRepository
         $stmt->bindParam(':volume', $volume);
         $stmt->bindParam(':amount_of_people', $amountOfPeople);
         $stmt->bindParam(':weight', $weight);
+        $stmt->execute();
+        return $pdo->lastInsertId();
+    }
+
+    public static function editAttribute($id, $width, $height, $depth, $temperature_max, $temperature_min, $volume, $amountOfPeople, $weight): int
+    {
+        $pdo = Connection::getPdoInstance();
+        $stmt = $pdo->prepare(
+            "UPDATE ATTRIBUTE set width = :width, height = :height, depth = :depth, temperature_max = :temperature_max, temperature_min =:temperature_min, volume =:volume, amount_of_people =:amount_of_people,  weight = :weight where id = :id"
+        );
+        $stmt->bindParam(':width', $width);
+        $stmt->bindParam(':height', $height);
+        $stmt->bindParam(':depth', $depth);
+        $stmt->bindParam(':temperature_max', $temperature_max);
+        $stmt->bindParam(':temperature_min', $temperature_min);
+        $stmt->bindParam(':volume', $volume);
+        $stmt->bindParam(':amount_of_people', $amountOfPeople);
+        $stmt->bindParam(':weight', $weight);
+        $stmt->bindParam(':id', $id);
         $stmt->execute();
         return $pdo->lastInsertId();
     }

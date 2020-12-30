@@ -22,6 +22,14 @@ if (AuthController::isLoggedIn()):
     if (isset($_POST["newpass"])) {
         UserRepository::changeUserPass($id, $_POST["newpass"]);
     }
+    if (isset($_POST["deleteId"])) {
+        DeliveryRepository::deleteDeliveryInfo($_POST["deleteId"]);
+        unset($_POST["deleteId"]);
+    }
+    if (isset($_POST["editId"])) {
+        $_SESSION["editDeliveryId"] = $_POST["editId"];
+        header("Location:?page=edit_delivery_info");
+    }
 
 
     $user = UserRepository::getUserById($id);
@@ -80,9 +88,24 @@ if (AuthController::isLoggedIn()):
                     <div>
                         <? echo $info["zip"] . " " . $info["city"] ?>
                     </div>
-
+                    <? if (DeliveryRepository::canDeleteDeliveryInfo($info["id"])): ?>
+                    <div class="flexbox">
+                        <form method="post">
+                            <input type="hidden" name="deleteId" value=<? echo $info["id"] ?>>
+                            <input type="submit" value="Smazat">
+                        </form>
+                        <? endif; ?>
+                        <? if (DeliveryRepository::canEditDeliveryInfo($info["id"])): ?>
+                        <form method="post">
+                            <input type="hidden" name="editId" value=<? echo $info["id"] ?>>
+                            <input type="submit" value="Upravit">
+                        </form>
+                    </div>
+                <? endif; ?>
                 </div>
+
             <? endforeach; ?>
+
 
         </div>
         <h2>Mé objednávky</h2>

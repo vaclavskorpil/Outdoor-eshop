@@ -39,6 +39,9 @@ if (AuthController::isAdmin()) {
             case "add_product":
                 include "pages/admin/add_product.php";
                 break;
+            case "edit_product":
+                include "pages/admin/edit_product.php";
+                break;
         }
     }
 }
@@ -73,6 +76,9 @@ if (isset($_GET["page"])) {
             break;
         case "order_detail":
             include "pages/order_detail.php";
+            break;
+        case "edit_delivery_info":
+            include "pages/edit_delivery_info.php";
             break;
     }
 

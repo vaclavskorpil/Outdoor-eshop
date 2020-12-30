@@ -7,9 +7,10 @@ if (AuthController::isAdmin()): ?>
     <?php
     $products = ProductRepository::getAllProducts();
 
-    if(isset($_POST["deleteId"])){
+    if (isset($_POST["deleteId"])) {
         ProductRepository::deleteProduct($_POST["deleteId"]);
         unset($_POST["deleteId"]);
+        header("Location:?product_control");
     }
     ?>
     <link rel="stylesheet" href="css/basic_table.css">
@@ -31,6 +32,7 @@ if (AuthController::isAdmin()): ?>
                     <th> Kategorie</th>
                     <th> Cena</th>
                     <th> Dph</th>
+                    <th></th>
                     <th></th>
 
                 </tr>
@@ -68,10 +70,15 @@ if (AuthController::isAdmin()): ?>
                         </td>
 
                         <td style="width: 80px">
-                                <form method="post">
-                                    <input type="hidden" name="deleteId" value=<? echo $product["id"] ?>>
-                                    <input type="submit" value="Smaž">
-                                </form>
+                            <form action="?page=edit_product&productId=<? echo $product["id"] ?>" method="post">
+                                <input type="submit" value="Uprav">
+                            </form>
+                        </td>
+                        <td style="width: 80px">
+                            <form method="post">
+                                <input type="hidden" name="deleteId" value=<? echo $product["id"] ?>>
+                                <input type="submit" value="Smaž">
+                            </form>
                         </td>
                     </tr>
 
