@@ -1,5 +1,4 @@
 <?php use services\AuthController;
-use services\OrderRepository;
 use services\ProductRepository;
 
 if (AuthController::isAdmin()): ?>
@@ -10,7 +9,7 @@ if (AuthController::isAdmin()): ?>
     if (isset($_POST["deleteId"])) {
         ProductRepository::deleteProduct($_POST["deleteId"]);
         unset($_POST["deleteId"]);
-        header("Location:?product_control");
+        header("refresh:0");
     }
     ?>
     <link rel="stylesheet" href="css/basic_table.css">

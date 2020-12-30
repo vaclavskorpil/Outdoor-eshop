@@ -144,13 +144,13 @@
 
 
         <div class="input-group">
-            <label>Maximální teplota [°C]</label>
+            <label>Minimální teplota [°C]</label>
             <input type='number' name='temperature_max' value=<? echo $product["temperature_max"] ?>>
         </div>
 
 
         <div class="input-group">
-            <label>Minimální teplota [°C]</label>
+            <label>Komfortní teplota [°C]</label>
             <input type='number' name='temperature_min' value=<? echo $product["tempeture_min"] ?>>
         </div>
 
@@ -161,7 +161,7 @@
         </div>
 
         <div class="input-group">
-            <label>Váha [kg]</label>
+            <label>Váha [g]</label>
             <input type='number' name='weight' value=<? echo $product["weight"] ?>>
         </div>
 

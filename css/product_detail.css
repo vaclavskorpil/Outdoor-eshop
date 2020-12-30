@@ -52,16 +52,6 @@
     width: 300px;
 }
 
-.additional-items-title {
-    padding: 10px;
-    color: black;
-    font-size: 22px;
-    background-color: #e8e8e8;
-    margin: 25px 0;
-    border-radius: 10px;
-
-}
-
 .additional-items {
     margin: auto;
     display: flex;

@@ -1,9 +1,20 @@
 .shop-body {
     text-decoration: none;
     font-size: 20px;
+    width: 100%;
     color: #818181;
     display: flex;
     background: #757575;
+}
+
+.full-screen-bean {
+    padding: 10px;
+    color: black;
+    font-size: 22px;
+    background-color: #e8e8e8;
+    margin: 25px 0;
+    border-radius: 10px;
+
 }
 
 
@@ -24,14 +35,15 @@
     border-radius: 10px;
     background-color: #e8e8e8;
 }
+
 @media (max-width: 1150px) {
-    .shop-item{
+    .shop-item {
         width: 46%;
     }
 }
 
 @media (max-width: 650px) {
-    .shop-item{
+    .shop-item {
         width: 94%;
         padding: 2%;
         margin: 2%;
@@ -117,7 +129,7 @@
     color: red;
 }
 
-.product-image{
+.product-image {
     border-radius: 10px;
     width: 100%;
 }

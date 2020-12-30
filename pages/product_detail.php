@@ -32,16 +32,16 @@ if (isset($_GET["productId"])): ?>
                                     echo "<div>Šířka: {$product['width']} cm</div>";
                                 }
                                 if (isset($product["height"])) {
-                                    echo "<div>Víška: {$product['height']} cm</div>";
+                                    echo "<div>Výška: {$product['height']} cm</div>";
                                 }
                                 if (isset($product["depth"])) {
                                     echo "<div>Hloubka: {$product['depth']} cm</div>";
                                 }
                                 if (isset($product["temperature_max"])) {
-                                    echo "<div>Maximální teplota: {$product['tempereture_max']} °C</div>";
+                                    echo "<div>Minimální teplota: {$product['tempereture_max']} °C</div>";
                                 }
                                 if (isset($product["temperature_min"])) {
-                                    echo "<div>Minimální teplota: {$product['temperature_min']} °C</div>";
+                                    echo "<div>Komfortní teplota: {$product['temperature_min']} °C</div>";
                                 }
                                 if (isset($product["volume"])) {
                                     echo "<div>Obsah: {$product['volume']} l</div>";
@@ -82,7 +82,7 @@ if (isset($_GET["productId"])): ?>
                 </div>
             <?php endif; ?>
         </div>
-        <div class="additional-items-title">
+        <div class="full-screen-bean">
             Mohlo by vás také zajímat
         </div>
         <?
